@@ -40,8 +40,9 @@ pipeline {
                 }
             }
         }
+    }
 
-    //     // Stage 2: Deploy
+    // Stage 2: Deploy
     //     stage('Deploy') {
     //         agent { docker { image 'ubuntu:latest' } } // Menggunakan Ubuntu sebagai runner
     //         steps {
@@ -59,7 +60,6 @@ pipeline {
     //         }
     //     }
     // }
-
     post {
         always {
             echo 'Pipeline Completed'
