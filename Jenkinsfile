@@ -1,5 +1,10 @@
 pipeline {
-    agent any // Menggunakan Jenkins default agent
+   agent {
+        docker {
+            image 'docker:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // Simpan username DockerHub sebagai credential
@@ -11,22 +16,15 @@ pipeline {
     }
 
     stages {
-        // Stage 1: Build dan Push Docker Image
-        stage('Build and Push Docker Image') {
+        stage('Build') {
             steps {
                 script {
-                    // Login ke DockerHub
+                    /// Login ke DockerHub
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh """
                             echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
                         """
                     }
-
-                    // Build Docker Image dan Push ke DockerHub
-                    sh """
-                        docker build -t ${DOCKER_USER}/${REGISTRY_IMAGE} .
-                        docker push ${DOCKER_USER}/${REGISTRY_IMAGE}
-                    """
                 }
             }
         }
