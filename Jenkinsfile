@@ -15,12 +15,12 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 script {
-                    // Install dependencies dan build aplikasi
+                    // Install sudo, dependencies dan build aplikasi
                     sh """
-                        echo "Building Application..."
-                        sudo apt-get update && sudo apt-get install -y curl git npm
-                        curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
-                        sudo apt-get install -y nodejs
+                        echo "Installing sudo and building Application..."
+                        apt-get update && apt-get install -y sudo curl git npm
+                        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+                        apt-get install -y nodejs
                         npm install
                         npm run build
                     """
