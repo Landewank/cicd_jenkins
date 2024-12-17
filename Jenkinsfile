@@ -18,9 +18,10 @@ pipeline {
                     // Install dependencies dan build aplikasi
                     sh """
                         echo "Building Application..."
-                        apt-get update && apt-get install -y curl git npm
+                        sudo apt-get update
+                        sudo apt-get update && apt-get install -y curl git npm
                         curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-                        apt-get install -y nodejs
+                        sudo apt-get install -y nodejs
                         npm install
                         npm run build
                     """
