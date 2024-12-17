@@ -15,12 +15,6 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 script {
-                    // Install sudo, dependencies dan build aplikasi
-                    sh """
-                        npm install
-                        npm run build
-                    """
-
                     // Login ke DockerHub
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh """
