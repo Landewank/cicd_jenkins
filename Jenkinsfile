@@ -18,7 +18,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'test'
+                script {
+                    sh '''
+                        echo "Running on Ubuntu 24.04"
+                        cat /etc/os-release
+                    '''
+                }
             }
         }
         stage('Deploy') {
