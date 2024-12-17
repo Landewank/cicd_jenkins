@@ -1,22 +1,26 @@
 pipeline {
-    agent { docker { image 'node:20' } } // Menggunakan image Node.js resmi versi 20
+    agent any // Menggunakan Jenkins default agent
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
-        VPS_PRIVATE_KEY = credentials('vps-private-key')
-        DOCKERHUB_USERNAME = credentials('docker-username')
-        REGISTRY_IMAGE = credentials('image-registry')
-        SERVER_HOST = credentials('server-host')
-        SERVER_USERNAME = credentials('server-username')
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // Simpan username DockerHub sebagai credential
+        VPS_PRIVATE_KEY = credentials('vps-private-key') // Simpan private key SSH sebagai credential
+        DOCKERHUB_USERNAME = credentials('docker-username') // simpan username dockerhub
+        REGISTRY_IMAGE = credentials('image-registry') //repository image di docker hub
+        SERVER_HOST = credentials('server-host') // IP Server host sebagai credential
+        SERVER_USERNAME = credentials('server-username') // Server username sebagai credential
     }
 
     stages {
+        // Stage 1: Build dan Push Docker Image
         stage('Build and Push Docker Image') {
             steps {
                 script {
                     // Install dependencies dan build aplikasi
                     sh """
                         echo "Building Application..."
+                        apt-get update && apt-get install -y curl git npm
+                        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+                        apt-get install -y nodejs
                         npm install
                         npm run build
                     """
