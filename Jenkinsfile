@@ -1,5 +1,10 @@
 pipeline {
-   agent any
+   agent {
+        docker {
+            image 'ubuntu:24.04' // Menggunakan image Ubuntu 24.04
+            args '-v /var/run/docker.sock:/var/run/docker.sock' // Opsional jika butuh akses Docker daemon
+        }
+    }
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // Simpan username DockerHub sebagai credential
