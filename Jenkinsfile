@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker { image 'ubuntu:latest' } } // Menggunakan Ubuntu sebagai runner
+    agent { docker { image 'node:20' } } // Menggunakan image Node.js resmi versi 20
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
@@ -17,10 +17,6 @@ pipeline {
                     // Install dependencies dan build aplikasi
                     sh """
                         echo "Building Application..."
-                        sudo apt-get update
-                        sudo apt-get install -y curl git npm
-                        curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-                        sudo apt-get install -y nodejs
                         npm install
                         npm run build
                     """
