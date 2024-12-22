@@ -1,14 +1,17 @@
 pipeline {
     agent {
-        docker { image 'ubuntu:24.04' } // Menjalankan pipeline dalam Ubuntu 24.04
+        docker {
+            image 'ubuntu:24.04'
+            args '-u root' // Menjalankan sebagai user root
+        }
     }
 
     environment {
-        DOCKER_IMAGE = credentials('docker-image') // Sesuaikan dengan username Anda
-        DOCKERHUB_LOGIN = credentials('dockerhub-credentials') // akses docker
-        VPS_HOST = credentials('vps-host')  // Simpan host VPS di Jenkins Credentials
-        VPS_USERNAME = credentials('vps-username')  // Simpan username VPS di Jenkins Credentials
-        VPS_PRIVATE_KEY = credentials('vps-private-key')  // Simpan private key VPS di Jenkins Credentials
+        DOCKER_IMAGE = credentials('docker-image')
+        DOCKERHUB_LOGIN = credentials('dockerhub-credentials')
+        VPS_HOST = credentials('vps-host')
+        VPS_USERNAME = credentials('vps-username')
+        VPS_PRIVATE_KEY = credentials('vps-private-key')
     }
 
     stages {
@@ -25,15 +28,11 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Login ke DockerHub
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                         sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
                     }
-                    // Build Docker image
                     sh 'docker build -t $DOCKER_IMAGE .'
-                    // Tampilkan Docker image untuk memastikan
                     sh 'docker images'
-                    // Push Docker image ke DockerHub
                     sh 'docker push $DOCKER_IMAGE'
                 }
             }
@@ -59,7 +58,7 @@ pipeline {
 
     post {
         always {
-            cleanWs()  // Membersihkan workspace setelah pipeline selesai
+            cleanWs()
         }
     }
 }
