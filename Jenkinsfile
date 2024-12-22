@@ -21,8 +21,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'node --version' // Verifikasi Node.js
-                    sh 'npm --version'  // Verifikasi npm
+                    //sh 'node --version' // Verifikasi Node.js
+                    //sh 'npm --version'  // Verifikasi npm
                     sh 'npm install'    // Instal dependensi
                     sh 'npm run test'   // Jalankan pengujian
                     sh 'npm run build'  // Build aplikasi
