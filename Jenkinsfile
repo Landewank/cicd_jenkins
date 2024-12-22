@@ -3,9 +3,6 @@ pipeline {
         docker { 
             image 'ubuntu:24.04'
             args '-u root'
-            volumes {
-            hostPath('/var/run/docker.sock:/var/run/docker.sock') // Mount Docker socket
-            }
         }
     }
     // agent any // 
@@ -45,6 +42,12 @@ pipeline {
         }
 
         stage('Build Docker Image') {
+            agent {
+                docker {
+                    image 'docker:20.10-dind'  // Ganti dengan image Docker yang mendukung DinD
+                    args '--privileged'  // Menjalankan container dengan hak istimewa
+                }
+            }
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
