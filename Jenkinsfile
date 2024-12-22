@@ -12,7 +12,6 @@ pipeline {
     }
 
     stages {
-        stages {
         stage('Install Dependencies') {
             steps {
                 sh '''
@@ -22,6 +21,7 @@ pipeline {
                 '''
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -55,12 +55,11 @@ pipeline {
                 }
             }
         }
-        }
-    
-        post {
-            always {
-                cleanWs()  // Membersihkan workspace setelah pipeline selesai
-            }
+    }
+
+    post {
+        always {
+            cleanWs()  // Membersihkan workspace setelah pipeline selesai
         }
     }
 }
