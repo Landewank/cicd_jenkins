@@ -18,8 +18,10 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'apt-get update'
-                sh 'apt-get install -y nodejs npm'
+                // sh 'apt-get install -y nodejs npm'
                 sh 'npm install'
+                sh 'npm run test'
+                sh 'npm run build'
             }
         }
 
