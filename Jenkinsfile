@@ -1,9 +1,6 @@
 pipeline {
     agent {
-        docker {
-            image 'ubuntu:24.04'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'  // Mount Docker socket
-        }
+        docker { image 'ubuntu:24.04' }
     }
 
     environment {
@@ -17,11 +14,9 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                sh '''
-                    apt-get update
-                    apt-get install -y nodejs npm
-                    npm install
-                '''
+                sh 'sudo apt-get update'
+                sh 'sudo apt-get install -y nodejs npm'
+                sh 'npm install'
             }
         }
 
