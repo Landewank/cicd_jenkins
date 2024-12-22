@@ -22,45 +22,54 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                script {
-                    sh 'node --version' // Verifikasi Node.js
-                    sh 'npm --version'  // Verifikasi npm
-                    sh 'npm install'    // Instal dependensi
-                    // sh 'npm run test'   // Jalankan pengujian
-                    sh 'npm run build'  // Build aplikasi
-                }
+                sh '''
+                    # Update package list
+                    apt-get update
+                    apt-get install -y curl
+
+                    # Install Node.js 23.5.0 from NodeSource
+                    curl -sL https://deb.nodesource.com/setup_23.x | bash -
+                    apt-get install -y nodejs
+
+                    # Verifikasi versi Node.js dan npm
+                    node --version
+                    npm --version
+
+                    # Install project dependencies
+                    npm install
+                '''
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                        sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
-                    }
-                    sh 'docker build -t $DOCKER_IMAGE .'
-                    sh 'docker images'
-                    sh 'docker push $DOCKER_IMAGE'
-                }
-            }
-        }
+        // stage('Build Docker Image') {
+        //     steps {
+        //         script {
+        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+        //                 sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+        //             }
+        //             sh 'docker build -t $DOCKER_IMAGE .'
+        //             sh 'docker images'
+        //             sh 'docker push $DOCKER_IMAGE'
+        //         }
+        //     }
+        // }
 
-        stage('Deploy to Remote Server') {
-            steps {
-                script {
-                    sshagent([VPS_PRIVATE_KEY]) {
-                        sh '''
-                            ssh -o StrictHostKeyChecking=no -i $VPS_PRIVATE_KEY $VPS_USERNAME@$VPS_HOST "
-                            docker pull $DOCKER_IMAGE &&
-                            docker stop lanafatemani || true &&
-                            docker rm lanafatemani || true &&
-                            docker run -d --name lanafatemani -p 3001:3000 $DOCKER_IMAGE
-                            "
-                        '''
-                    }
-                }
-            }
-        }
+        // stage('Deploy to Remote Server') {
+        //     steps {
+        //         script {
+        //             sshagent([VPS_PRIVATE_KEY]) {
+        //                 sh '''
+        //                     ssh -o StrictHostKeyChecking=no -i $VPS_PRIVATE_KEY $VPS_USERNAME@$VPS_HOST "
+        //                     docker pull $DOCKER_IMAGE &&
+        //                     docker stop lanafatemani || true &&
+        //                     docker rm lanafatemani || true &&
+        //                     docker run -d --name lanafatemani -p 3001:3000 $DOCKER_IMAGE
+        //                     "
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     post {
