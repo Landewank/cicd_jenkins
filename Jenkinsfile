@@ -5,6 +5,9 @@ pipeline {
             args '-u root'
         }
     }
+    tools {
+        nodejs 'NodeJS'
+    }
 
     environment {
         DOCKER_IMAGE = credentials('docker-image')
@@ -17,9 +20,9 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                sh 'apt-get update'
-                // sh 'apt-get install -y nodejs npm'
+                sh 'node --version'
                 sh 'npm install'
+                sh 'npm --version' 
                 sh 'npm run test'
                 sh 'npm run build'
             }
