@@ -1,15 +1,15 @@
 pipeline {
-    agent {
-        docker { 
-            image 'ubuntu:24.04'
-            args '-u root'
-        }
-    }
-    // agent any // 
-
-    // tools {
-    //     nodejs 'nodejs' // Sesuaikan dengan nama NodeJS di Global Tool Configuration (ini digunakan kalau angent any)
+    // agent {
+    //     docker { 
+    //         image 'ubuntu:24.04'
+    //         args '-u root'
+    //     }
     // }
+    agent any // 
+
+    tools {
+        nodejs 'nodejs' // Sesuaikan dengan nama NodeJS di Global Tool Configuration (ini digunakan kalau angent any)
+    }
 
     environment {
         DOCKER_IMAGE = credentials('docker-image')
@@ -23,31 +23,14 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                    # Update package list
-                    apt-get update
-                    apt-get install -y curl
-
-                    # Install Node.js 23.5.0 from NodeSource
-                    curl -sL https://deb.nodesource.com/setup_23.x | bash -
-                    apt-get install -y nodejs
-
-                    # Verifikasi versi Node.js dan npm
-                    node --version
-                    npm --version
-
                     # Install project dependencies
                     npm install
+                    npm run build
                 '''
             }
         }
 
         stage('Build Docker Image') {
-            agent {
-                docker {
-                    image 'docker:20.10-dind'  // Ganti dengan image Docker yang mendukung DinD
-                    args '--privileged'  // Menjalankan container dengan hak istimewa
-                }
-            }
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
