@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = credentials('docker-image') // Sesuaikan dengan username Anda
-        DOCKERHUB_LOGIN = credentials('dockerhub-credentials')
+        DOCKERHUB_LOGIN = credentials('dockerhub-credentials') // akses docker
         VPS_HOST = credentials('vps-host')  // Simpan host VPS di Jenkins Credentials
         VPS_USERNAME = credentials('vps-username')  // Simpan username VPS di Jenkins Credentials
         VPS_PRIVATE_KEY = credentials('vps-private-key')  // Simpan private key VPS di Jenkins Credentials
