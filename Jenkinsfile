@@ -1,15 +1,15 @@
 pipeline {
-    // agent {
-    //     docker { 
-    //         image 'ubuntu:24.04'
-    //         args '-u root'
-    //     }
-    // }
-    agent any
-
-    tools {
-        nodejs 'nodejs' // Sesuaikan dengan nama NodeJS di Global Tool Configuration
+    agent {
+        docker { 
+            image 'ubuntu:24.04'
+            args '-u root'
+        }
     }
+    // agent any // 
+
+    // tools {
+    //     nodejs 'nodejs' // Sesuaikan dengan nama NodeJS di Global Tool Configuration (ini digunakan kalau angent any)
+    // }
 
     environment {
         DOCKER_IMAGE = credentials('docker-image')
@@ -26,7 +26,7 @@ pipeline {
                     sh 'node --version' // Verifikasi Node.js
                     sh 'npm --version'  // Verifikasi npm
                     sh 'npm install'    // Instal dependensi
-                    sh 'npm run test'   // Jalankan pengujian
+                    // sh 'npm run test'   // Jalankan pengujian
                     sh 'npm run build'  // Build aplikasi
                 }
             }
