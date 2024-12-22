@@ -55,11 +55,12 @@ pipeline {
                 }
             }
         }
-    }
+        }
     
-    post {
-        always {
-            cleanWs()  // Membersihkan workspace setelah pipeline selesai
+        post {
+            always {
+                cleanWs()  // Membersihkan workspace setelah pipeline selesai
+            }
         }
     }
 }
