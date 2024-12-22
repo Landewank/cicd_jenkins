@@ -1,10 +1,10 @@
 pipeline {
        agent {
-        docker {
-            image 'docker:20.10.24-dind'
-            args '--privileged -u root'
+        docker { 
+            image 'ubuntu:24.04'
+            args '-u root'
         }
-    }
+       }
     
     //agent any // 
 
@@ -21,31 +21,33 @@ pipeline {
     }
 
     stages {
-        // stage('Install Dependencies') {
-        //     steps {
-        //         sh '''
-        //         # Update package list
-        //             apt-get update
-        //             apt-get install -y curl
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                # Update package list
+                    apt-get update
+                    apt-get install -y curl
 
-        //             # Install Node.js 23.5.0 from NodeSource
-        //             curl -sL https://deb.nodesource.com/setup_23.x | bash -
-        //             apt-get install -y nodejs
+                    # Install Node.js 23.5.0 from NodeSource
+                    curl -sL https://deb.nodesource.com/setup_23.x | bash -
+                    apt-get install -y nodejs
+                    apt-get install -y docker.io
 
-        //             # Verifikasi versi Node.js dan npm
-        //             node --version
-        //             npm --version
+                    # Verifikasi versi Node.js dan npm
+                    node --version
+                    npm --version
 
-        //             # Install project dependencies
-        //             npm install
-        //             npm run build
-        //         '''
-        //     }
-        // }
+                    # Install project dependencies
+                    npm install
+                    npm run build
+                '''
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
                 script {
+                       
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                         sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
                     }
