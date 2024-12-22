@@ -31,13 +31,6 @@ pipeline {
                     sh 'docker build -t $DOCKER_IMAGE .'
                     // Tampilkan Docker image untuk memastikan
                     sh 'docker images'
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                script {
                     // Push Docker image ke DockerHub
                     sh 'docker push $DOCKER_IMAGE'
                 }
