@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "${USERNAME}/lanafatemani:latest"  // Sesuaikan dengan username Anda
+        DOCKER_IMAGE = credentials('docker-image') // Sesuaikan dengan username Anda
         DOCKERHUB_LOGIN = credentials('dockerhub-credentials')
         VPS_HOST = credentials('vps-host')  // Simpan host VPS di Jenkins Credentials
         VPS_USERNAME = credentials('vps-username')  // Simpan username VPS di Jenkins Credentials
