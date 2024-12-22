@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'ubuntu:24.04'
-            args '-u root' // Menjalankan sebagai user root
+            args '-v /var/run/docker.sock:/var/run/docker.sock'  // Mount Docker socket
         }
     }
 
