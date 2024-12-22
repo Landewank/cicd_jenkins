@@ -1,7 +1,9 @@
 pipeline {
     agent {
-        docker { image 'ubuntu:24.04' }
-        args '-u root'
+        docker { 
+            image 'ubuntu:24.04'
+            args '-u root'
+        }
     }
 
     environment {
