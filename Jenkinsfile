@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        docker { image 'ubuntu:24.04' } // Menjalankan pipeline dalam Ubuntu 24.04
+    }
 
     environment {
         DOCKER_IMAGE = credentials('docker-image') // Sesuaikan dengan username Anda
@@ -10,16 +12,16 @@ pipeline {
     }
 
     stages {
+        stages {
         stage('Install Dependencies') {
-            agent {
-                docker { image 'node:23.4-alpine3.21' }
-            }
             steps {
-                checkout scm  // Checkout repository
-                sh 'npm install'  // Install dependencies
+                sh '''
+                    apt-get update
+                    apt-get install -y nodejs npm
+                    npm install
+                '''
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 script {
@@ -40,13 +42,14 @@ pipeline {
         stage('Deploy to Remote Server') {
             steps {
                 script {
-                    // Install SSH Client dan melakukan deploy menggunakan SSH
                     sshagent([VPS_PRIVATE_KEY]) {
                         sh '''
-                            sudo docker pull $DOCKER_IMAGE
-                            sudo docker stop lanafatemani || true
-                            sudo docker rm lanafatemani || true
-                            sudo docker run -d --name lanafatemani -p 3001:3000 $DOCKER_IMAGE
+                            ssh -o StrictHostKeyChecking=no -i $VPS_PRIVATE_KEY $VPS_USERNAME@$VPS_HOST "
+                            docker pull $DOCKER_IMAGE &&
+                            docker stop lanafatemani || true &&
+                            docker rm lanafatemani || true &&
+                            docker run -d --name lanafatemani -p 3001:3000 $DOCKER_IMAGE
+                            "
                         '''
                     }
                 }
