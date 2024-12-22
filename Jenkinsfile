@@ -6,7 +6,7 @@ pipeline {
         }
     }
     tools {
-        nodejs 'nodejs'
+        nodejs 'nodejs' // Sesuaikan dengan nama NodeJS di Global Tool Configuration
     }
 
     environment {
@@ -20,11 +20,13 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                sh 'node --version'
-                sh 'npm install'
-                sh 'npm --version' 
-                sh 'npm run test'
-                sh 'npm run build'
+                script {
+                    sh 'node --version' // Verifikasi Node.js
+                    sh 'npm --version'  // Verifikasi npm
+                    sh 'npm install'    // Instal dependensi
+                    sh 'npm run test'   // Jalankan pengujian
+                    sh 'npm run build'  // Build aplikasi
+                }
             }
         }
 
