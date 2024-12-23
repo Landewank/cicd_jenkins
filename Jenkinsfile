@@ -43,23 +43,32 @@ pipeline {
         //         }
         //     }
         // }
-
-        stage('Deploy to Remote Server') {
-            steps {
-                script {
-                    sshagent(credentials : ['vps-private-key'] ) {
-                        sh '''
-                            ssh -o StrictHostKeyChecking=no -i $VPS_PRIVATE_KEY $VPS_USERNAME@$VPS_HOST "
-                            #docker pull $DOCKER_IMAGE &&
-                            #docker stop lanafatemani || true &&
-                            docker rm lanafatemani || true &&
-                            docker run -d --name lanafatemani -p 3001:3000 $DOCKER_IMAGE
-                            "
-                        '''
-                    }
-                }
+    stage('Validate Credentials') {
+        steps {
+            script {
+                echo "VPS Host: ${VPS_HOST}"
+                echo "VPS Username: ${VPS_USERNAME}"
+                echo "Docker Image: ${DOCKER_IMAGE}"
             }
         }
+    }
+
+        // stage('Deploy to Remote Server') {
+        //     steps {
+        //         script {
+        //             sshagent(credentials : ['vps-private-key'] ) {
+        //                 sh '''
+        //                     ssh -o StrictHostKeyChecking=no -i $VPS_PRIVATE_KEY $VPS_USERNAME@$VPS_HOST "
+        //                     #docker pull $DOCKER_IMAGE &&
+        //                     #docker stop lanafatemani || true &&
+        //                     docker rm lanafatemani || true &&
+        //                     docker run -d --name lanafatemani -p 3001:3000 $DOCKER_IMAGE
+        //                     "
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     post {
