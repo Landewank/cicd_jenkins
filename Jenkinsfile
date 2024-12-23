@@ -47,7 +47,7 @@ pipeline {
         stage('Deploy to Remote Server') {
             steps {
                 script {
-                    sshagent([VPS_PRIVATE_KEY]) {
+                    sshagent(credentials : [VPS_PRIVATE_KEY] ) {
                         sh '''
                             ssh -o StrictHostKeyChecking=no -i $VPS_PRIVATE_KEY $VPS_USERNAME@$VPS_HOST "
                             #docker pull $DOCKER_IMAGE &&
