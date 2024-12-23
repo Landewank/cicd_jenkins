@@ -47,10 +47,8 @@ pipeline {
 
         stage('Deploy to Remote Server') {
             steps {
-                script {
-                    sshagent(['vps-private-key']) {
-                        sh 'ssh-add -l' // Menampilkan daftar key yang dimuat
-                    }
+                sshagent(['vps-private-key']) {
+                    sh 'ls'
                 }
             }
         }
