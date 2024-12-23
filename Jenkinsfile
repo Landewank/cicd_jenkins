@@ -1,12 +1,12 @@
 pipeline {
-       agent {
-        docker { 
-            image 'ubuntu:24.04'
-            args '-u root'
-        }
-       }
+    //    agent {
+    //     docker { 
+    //         image 'ubuntu:24.04'
+    //         args '-u root'
+    //     }
+    //    }
     
-    //agent any // 
+    agent any // 
 
     tools {
         nodejs 'nodejs' // Sesuaikan dengan nama NodeJS di Global Tool Configuration (ini digunakan kalau angent any)
