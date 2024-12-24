@@ -21,37 +21,37 @@ pipeline {
     }
 
     stages {
-        // stage('Install Dependencies') {
-        //     steps {
-        //         sh '''
-        //             # Install dependencies dan build project menggunakan Node.js dari Jenkins
-        //             npm install
-        //             npm run build
-        //         '''
-        //     }
-        // }
-        // stage('Build Docker Image') {
-        //     steps {
-        //         script {
-                       
-        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-        //                 sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
-        //             }
-        //             sh 'docker build -t $DOCKER_IMAGE .'
-        //             sh 'docker images'
-        //             sh 'docker push $DOCKER_IMAGE'
-        //         }
-        //     }
-        // }
-    
-
-        stage('Deploy to Remote Server') {
+        stage('Install Dependencies') {
             steps {
-                sshagent(['vps-private-key']) {
-                    sh 'ls'
+                sh '''
+                    # Install dependencies dan build project menggunakan Node.js dari Jenkins
+                    npm install
+                    npm run build
+                '''
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                       
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+                    }
+                    sh 'docker build -t $DOCKER_IMAGE .'
+                    sh 'docker images'
+                    sh 'docker push $DOCKER_IMAGE'
                 }
             }
         }
+    
+
+        // stage('Deploy to Remote Server') {
+        //     steps {
+        //         sshagent(['vps-private-key']) {
+        //             sh 'ls'
+        //         }
+        //     }
+        // }
     }
 
     post {
