@@ -43,7 +43,27 @@ pipeline {
                 }
             }
         }
+<<<<<<< HEAD
     
+=======
+
+        // stage('Deploy to Remote Server') {
+        //     steps {
+        //         script {
+        //             sshagent([VPS_PRIVATE_KEY]) {
+        //                 sh '''
+        //                     ssh -o StrictHostKeyChecking=no -i $VPS_PRIVATE_KEY $VPS_USERNAME@$VPS_HOST "
+        //                     docker pull $DOCKER_IMAGE &&
+        //                     docker stop lanafatemani || true &&
+        //                     docker rm lanafatemani || true &&
+        //                     docker run -d --name lanafatemani -p 3001:3000 $DOCKER_IMAGE
+        //                     "
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
+>>>>>>> 619fd271a0999d17432fe14ae2fab433e7b69c08
     }
 
     post {
