@@ -15,9 +15,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = credentials('docker-image')
         DOCKERHUB_LOGIN = credentials('dockerhub-credentials')
-        VPS_HOST = credentials('vps-host')
-        VPS_USERNAME = credentials('vps-username')
-        VPS_PRIVATE_KEY = credentials('vps-private-key')
+        SSH_TARGET = credentials('ssh-target') // Mengambil username@IP dari Jenkins Credentials
     }
 
     stages {
@@ -46,14 +44,14 @@ pipeline {
 
         stage('Test SSH') {
             steps {
-                sshagent(['jenkins-key']) { // Gunakan ID yang sesuai dengan nama private key di Credentials
+                sshagent(['jenkins-key']) { // Gunakan ID private key di Jenkins Credentials
                     sh '''
                         echo "Debugging SSH Connection:"
-                        ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "ls -la"
+                        ssh -o StrictHostKeyChecking=no $SSH_TARGET "ls -la"
                         
                         echo "Running docker ps and docker images:"
-                        ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "docker ps"
-                        ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "docker stop lanafatemani"
+                        ssh -o StrictHostKeyChecking=no $SSH_TARGET "docker ps"
+                        ssh -o StrictHostKeyChecking=no $SSH_TARGET "docker start lanafatemani"
                     '''
                 }
             }
