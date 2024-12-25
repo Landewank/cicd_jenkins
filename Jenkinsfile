@@ -21,15 +21,15 @@ pipeline {
     }
 
     stages {
-        stage('Install Dependencies') {
-            steps {
-                sh '''
-                    # Install dependencies dan build project menggunakan Node.js dari Jenkins
-                    npm install
-                    npm run build
-                '''
-            }
-        }
+        // stage('Install Dependencies') {
+        //     steps {
+        //         sh '''
+        //             # Install dependencies dan build project menggunakan Node.js dari Jenkins
+        //             npm install
+        //             npm run build
+        //         '''
+        //     }
+        // }
         stage('Build Docker Image') {
             steps {
                 script {
