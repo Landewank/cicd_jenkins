@@ -21,26 +21,13 @@ pipeline {
     }
 
     stages {
-        // stage('Install Dependencies') {
-        //     steps {
-        //         sh '''
-        //             # Install dependencies dan build project menggunakan Node.js dari Jenkins
-        //             npm install
-        //             npm run build
-        //         '''
-        //     }
-        // }
-        stage('Debug Docker') {
+        stage('Install Dependencies') {
             steps {
-                script {
-                    sh '''
-                    echo "Checking Docker version:"
-                    docker --version || echo "Docker not found"
-
-                    echo "Listing Docker containers:"
-                    docker ps || echo "Docker ps failed"
-                    '''
-                }
+                sh '''
+                    # Install dependencies dan build project menggunakan Node.js dari Jenkins
+                    npm install
+                    npm run build
+                '''
             }
         }
         stage('Build Docker Image') {
@@ -53,6 +40,21 @@ pipeline {
                     sh 'docker build -t $DOCKER_IMAGE .'
                     sh 'docker images'
                     sh 'docker push $DOCKER_IMAGE'
+                }
+            }
+        }
+
+        stage('Test SSH') {
+            steps {
+                sshagent(['jenkins-key']) { // Gunakan ID yang sesuai dengan nama private key di Credentials
+                    sh '''
+                    echo "Debugging SSH Connection:"
+                    ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "ls -la"
+                    
+                    echo "Running docker ps and docker images:"
+                    ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST  "docker ps"
+                    ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST  "docker stop lanafatemani"
+                    '''
                 }
             }
         }
