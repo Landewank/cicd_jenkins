@@ -42,7 +42,7 @@ pipeline {
             }
         }
 
-        stage('Test SSH') {
+        stage('Deploy ke Server') {
             steps {
                 sshagent(['jenkins-key']) { // Gunakan ID private key di Jenkins Credentials
                     sh '''
