@@ -48,12 +48,12 @@ pipeline {
             steps {
                 sshagent(['jenkins-key']) { // Gunakan ID yang sesuai dengan nama private key di Credentials
                     sh '''
-                    echo "Debugging SSH Connection:"
-                    ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "ls -la"
-                    
-                    echo "Running docker ps and docker images:"
-                    ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST  "docker ps"
-                    ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST  "docker stop lanafatemani"
+                        echo "Debugging SSH Connection:"
+                        ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "ls -la"
+                        
+                        echo "Running docker ps and docker images:"
+                        ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "docker ps"
+                        ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "docker stop lanafatemani"
                     '''
                 }
             }
