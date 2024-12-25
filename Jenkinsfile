@@ -30,6 +30,19 @@ pipeline {
         //         '''
         //     }
         // }
+        stage('Debug Docker') {
+            steps {
+                script {
+                    sh '''
+                    echo "Checking Docker version:"
+                    docker --version || echo "Docker not found"
+
+                    echo "Listing Docker containers:"
+                    docker ps || echo "Docker ps failed"
+                    '''
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
