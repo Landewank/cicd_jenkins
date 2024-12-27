@@ -23,6 +23,7 @@ pipeline {
         }
         stage ('Unit Test') {
             steps {
+                echo "Run Unit Test"
                 sh 'npm run test'
             }
         }
