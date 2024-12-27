@@ -1,12 +1,5 @@
 pipeline {
-    //    agent {
-    //     docker { 
-    //         image 'ubuntu:24.04'
-    //         args '-u root'
-    //     }
-    //    }
-    
-    agent any // 
+    agent any 
 
     tools {
         nodejs 'nodejs' // Sesuaikan dengan nama NodeJS di Global Tool Configuration (ini digunakan kalau angent any)
@@ -26,6 +19,11 @@ pipeline {
                     npm install
                     npm run build
                 '''
+            }
+        }
+        stage ('Unit Test') {
+            steps {
+                sh 'npm run test'
             }
         }
         stage('Build Docker Image') {
@@ -50,7 +48,7 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no $SSH_TARGET "ls -la"
                         
                         echo "Running docker ps and docker images:"
-                        ssh -o StrictHostKeyChecking=no $SSH_TARGET "docker ps"
+                        ssh -o StrictHostKeyChecking=no $SSH_TARGET "docker stop lanafatemani"
                         ssh -o StrictHostKeyChecking=no $SSH_TARGET "docker start lanafatemani"
                     '''
                 }
