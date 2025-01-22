@@ -15,12 +15,13 @@ const CardService = ({ backgroundColor, hoverBgColor, imageSrc, title, descripti
             <div className="font-bold text-3xl">
               <h3>{title}</h3>
             </div>
-            <blockquote className="text-center">
-              <p>{description}</p>
-            </blockquote>
           </div>
+          <blockquote className="text-center">
+            <p>{description}</p>
+          </blockquote>
         </div>
       </div>
-      )
+    </div>
+  )
 }
-      export default CardService;
+export default CardService;
