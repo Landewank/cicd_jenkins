@@ -2,8 +2,7 @@ pipeline {
     agent any 
 
     tools {
-        nodejs 'nodejs' // Sesuaikan dengan nama NodeJS di Global Tool Configuration (ini digunakan kalau angent any)
-    }
+        nodejs 'nodejs' 
 
     environment {
         DOCKER_IMAGE = credentials('docker-image')
